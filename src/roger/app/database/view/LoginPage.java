@@ -12,6 +12,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import roger.app.database.model.users.User;
+import roger.app.database.model.users.UserHandler;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -19,9 +21,16 @@ import java.util.Optional;
 public class LoginPage {
 
     private Stage primaryStage;
-    private String userName;
-    private String password;
+    private static String userName;
 
+    public static String getUserName() {
+        return userName;
+    }
+
+    @FXML
+    private void handleExit() {
+        System.exit(1);
+    }
 
     @FXML
     private void showLoginDialog() {
@@ -74,22 +83,32 @@ public class LoginPage {
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
         result.ifPresent(userNamePassword -> {
-            System.out.println("UserName=" + userNamePassword.getKey() + "Password=" + userNamePassword.getValue());
-             validateUser();
+            if (validateUser(userNamePassword.getKey(), userNamePassword.getValue()))
+                openMenu();
+            else
+                showLoginDialog();
         });
 
     }
 
-    @FXML
-    private void handleExit() {
-        System.exit(1);
-    }
-
     //TODO: write validating code
-    private void validateUser() {
-        openMenu();
+    private boolean validateUser(String name, String password) {
+        UserHandler.addUsers(new User("Roger", "roger254", "admin"));
+        UserHandler.addUsers(new User("ken", "ken254", "regularUser"));
+        for (User user : UserHandler.getUsers()) {
+            if (user.getName().equals(name) && user.getPassword().equals(password)) {
+                userName = name;
+                return true;
+            }
+        }
+        return false;
     }
 
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    //open menu page
     private void openMenu() {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -104,9 +123,5 @@ public class LoginPage {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
     }
 }

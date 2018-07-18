@@ -15,7 +15,7 @@ public class Main extends Application {
     private AnchorPane pane;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         loadLoginPage();
         scene = initStage();
@@ -36,6 +36,10 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     private Scene initStage() {

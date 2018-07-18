@@ -5,15 +5,13 @@ public class User {
     private String password;
     private String access;
 
+
     public User(String name, String password, String access) {
         this.name = name;
         this.password = password;
         this.access = access;
     }
 
-    public String getAccess() {
-        return access;
-    }
 
     public String getName() {
         return name;
@@ -22,5 +20,9 @@ public class User {
     public String getPassword()
     {
         return password;
+    }
+
+    public String getAccess() {
+        return access;
     }
 }
