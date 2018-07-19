@@ -73,18 +73,18 @@ public class EditDialog {
         if (medicinePriceField.getText() == null || medicinePriceField.getText().length() == 0)
             errorMessage += "No valid price!\n";
         else {
-            //try to parse the price code into an double
+            //try to parse the price into an double
             try {
                 Double.parseDouble(medicinePriceField.getText());
             } catch (NumberFormatException e) {
-                errorMessage += "No valid price code (must be an double)!\n";
+                errorMessage += "No valid price (must be an double)!\n";
             }
         }
         //validate quantity
         if (medicineQuantityField.getText() == null || medicineQuantityField.getText().length() == 0)
             errorMessage += "No valid quantity!\n";
         else {
-            //try to parse the quantity  into an int
+            //try to parse the quantity into an int
             try {
                 Integer.parseInt(medicineQuantityField.getText());
             } catch (NumberFormatException e) {

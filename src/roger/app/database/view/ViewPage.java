@@ -14,6 +14,8 @@ import java.io.IOException;
 
 public class ViewPage {
 
+    private Stage primaryStage;
+
     @FXML
     private TableView<Medicine> medicineTable;
     @FXML
@@ -38,9 +40,16 @@ public class ViewPage {
 
     private Main main;
 
+    public void setMain(Main main) {
+        this.main = main;
+        medicineTable.setItems(main.getMedicineData());
+    }
+
     //called after fxml file has been loaded
     @FXML
     private void initialize() {
+        //set data to table
+
         //initialize the medicine table with the two columns
         medicineNameColumn.setCellValueFactory(cellData -> cellData.getValue().medicineNameProperty());
         medicineQuantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityNameProperty());
@@ -131,4 +140,9 @@ public class ViewPage {
     private void handleAdd() {
 
     }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
 }

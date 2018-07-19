@@ -22,6 +22,7 @@ public class LoginPage {
 
     private Stage primaryStage;
     private static String userName;
+    private Main main;
 
     public static String getUserName() {
         return userName;
@@ -117,11 +118,18 @@ public class LoginPage {
             //    menuStage.initModality(Modality.WINDOW_MODAL);
             // menuStage.initOwner(primaryStage);
 
-            Scene scene = new Scene(pane);
-            primaryStage.setScene(scene);
+            MenuPage menuPage = loader.getController();
+            menuPage.setPrimaryStage(primaryStage);
+            menuPage.setMain(main);
+
+            primaryStage.setScene(new Scene(pane));
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setMain(Main main) {
+        this.main = main;
     }
 }

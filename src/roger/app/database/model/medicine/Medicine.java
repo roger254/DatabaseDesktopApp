@@ -11,11 +11,14 @@ public class Medicine {
     private final ObjectProperty<LocalDate> entryDate;
     private final StringProperty medicineDescription;
 
-    public Medicine(String medicineName, double price, int quantity, String medicineDescription, int year, int month, int date) {
+    public Medicine(String medicineName, double price, int quantity) {
         this.medicineName = new SimpleStringProperty(medicineName);
         this.price = new SimpleDoubleProperty(price);
         this.quantity = new SimpleIntegerProperty(quantity);
+        //TODO:Change all these variables
+        String medicineDescription = "Med description";
         this.medicineDescription = new SimpleStringProperty(medicineDescription);
+        int year = 2000, month = 10, date = 12;
         this.entryDate = new SimpleObjectProperty<>(LocalDate.of(year, month, date));
     }
 
