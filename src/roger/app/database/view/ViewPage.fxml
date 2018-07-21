@@ -2,7 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="roger.app.database.view.ViewPage">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/8.0.121" fx:controller="roger.app.database.view.ViewPage">
    <children>
       <SplitPane dividerPositions="0.3308270676691729" layoutX="117.0" layoutY="114.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -61,14 +62,55 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                               <Button layoutX="433.0" layoutY="47.0" mnemonicParsing="false" onAction="#handleAdd"
-                                       text="Add"/>
-                               <Button layoutX="317.0" layoutY="47.0" mnemonicParsing="false" onAction="#handleDelete"
-                                       text="Delete"/>
-                               <Button layoutX="204.0" layoutY="47.0" mnemonicParsing="false" onAction="#handleEdit"
-                                       text="Edit"/>
-                               <Button layoutX="73.0" layoutY="47.0" mnemonicParsing="false" onAction="#handleCheckout"
-                                       text="CheckOut"/>
+                               <GridPane alignment="CENTER" hgap="10.0" prefHeight="121.0" prefWidth="528.0" vgap="10.0"
+                                         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                         AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                   <columnConstraints>
+                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                   </columnConstraints>
+                                   <rowConstraints>
+                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                   </rowConstraints>
+                                   <children>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                           <children>
+                                               <Button alignment="CENTER" contentDisplay="CENTER" layoutX="27.0"
+                                                       layoutY="47.0" mnemonicParsing="false" onAction="#handleAdd"
+                                                       text="Add"/>
+                                           </children>
+                                       </AnchorPane>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                           <children>
+                                               <Button fx:id="editButton" layoutX="27.0" layoutY="47.0"
+                                                       mnemonicParsing="false" onAction="#handleEdit" text="Edit"/>
+                                           </children>
+                                       </AnchorPane>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                                           <children>
+                                               <Button layoutX="21.0" layoutY="47.0" mnemonicParsing="false"
+                                                       onAction="#handleDelete" text="Delete"/>
+                                           </children>
+                                       </AnchorPane>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3">
+                                           <children>
+                                               <Button layoutX="10.0" layoutY="47.0" mnemonicParsing="false"
+                                                       onAction="#handleCheckout" text="CheckOut"/>
+                                           </children>
+                                       </AnchorPane>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4">
+                                           <children>
+                                               <Button layoutX="19.0" layoutY="47.0" mnemonicParsing="false" text="Back"
+                                                       onAction="#handleBack" AnchorPane.bottomAnchor="46.0"
+                                                       AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="19.0"
+                                                       AnchorPane.topAnchor="47.0"/>
+                                           </children>
+                                       </AnchorPane>
+                                   </children>
+                               </GridPane>
                            </children>
                         </AnchorPane>
                     </items>

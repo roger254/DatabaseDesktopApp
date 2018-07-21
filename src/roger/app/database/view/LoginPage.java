@@ -24,6 +24,10 @@ public class LoginPage {
     private static String userName;
     private Main main;
 
+    @FXML
+    private void initialize() {
+    }
+
     public static String getUserName() {
         return userName;
     }
@@ -95,7 +99,7 @@ public class LoginPage {
     //TODO: write validating code
     private boolean validateUser(String name, String password) {
         UserHandler.addUsers(new User("Roger", "roger254", "admin"));
-        UserHandler.addUsers(new User("ken", "ken254", "regularUser"));
+        UserHandler.addUsers(new User("Ken", "ken254", "regularUser"));
         for (User user : UserHandler.getUsers()) {
             if (user.getName().equals(name) && user.getPassword().equals(password)) {
                 userName = name;
@@ -107,10 +111,11 @@ public class LoginPage {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        primaryStage.setTitle("Login Page");
     }
 
     //open menu page
-    private void openMenu() {
+    public void openMenu() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("MenuPage.fxml"));
@@ -121,6 +126,7 @@ public class LoginPage {
             MenuPage menuPage = loader.getController();
             menuPage.setPrimaryStage(primaryStage);
             menuPage.setMain(main);
+            menuPage.setLoginPage(this);
 
             primaryStage.setScene(new Scene(pane));
             primaryStage.show();

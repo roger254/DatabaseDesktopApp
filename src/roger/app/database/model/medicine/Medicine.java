@@ -11,6 +11,14 @@ public class Medicine {
     private final ObjectProperty<LocalDate> entryDate;
     private final StringProperty medicineDescription;
 
+    public Medicine() {
+        medicineName = new SimpleStringProperty("");
+        medicineDescription = new SimpleStringProperty("");
+        price = new SimpleDoubleProperty(0.0);
+        quantity = new SimpleIntegerProperty(0);
+        entryDate = new SimpleObjectProperty<>(LocalDate.now());
+    }
+
     public Medicine(String medicineName, double price, int quantity) {
         this.medicineName = new SimpleStringProperty(medicineName);
         this.price = new SimpleDoubleProperty(price);

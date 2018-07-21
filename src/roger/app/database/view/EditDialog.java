@@ -29,6 +29,10 @@ public class EditDialog {
     private Medicine medicine;
     private boolean okClicked = false;
 
+    @FXML
+    private void intialize() {
+    }
+
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
@@ -36,17 +40,27 @@ public class EditDialog {
     public void setMedicine(Medicine medicine) {
         this.medicine = medicine;
 
-        medicineNameField.setText(medicine.getMedicineName());
-        medicineQuantityField.setText(String.valueOf(medicine.getQuantity()));
-        medicinePriceField.setText(String.valueOf(medicine.getPrice()));
-        medicineDescriptionField.setText(medicine.getMedicineDescription());
-        medicineEntryDateField.setText(DateUtil.format(medicine.getEntryDate()));
-        medicineEntryDateField.setPromptText("dd.mm.yyyy");
+        if (medicine != null) {
+            medicineNameField.setText(medicine.getMedicineName());
+            medicineQuantityField.setText(String.valueOf(medicine.getQuantity()));
+            medicinePriceField.setText(String.valueOf(medicine.getPrice()));
+            medicineDescriptionField.setText(medicine.getMedicineDescription());
+            medicineEntryDateField.setText(DateUtil.format(medicine.getEntryDate()));
+            medicineEntryDateField.setPromptText("dd.mm.yyyy");
+        } else {
+            medicineNameField.setPromptText("Medicine Name");
+            medicineQuantityField.setPromptText("Quantity to be Entered");
+            medicinePriceField.setPromptText("Price of Item");
+            medicineDescriptionField.setPromptText("Special Notes");
+            medicineEntryDateField.setText("");
+            medicineEntryDateField.setPromptText("dd.mm.yyyy");
+        }
     }
 
     public boolean isOkClicked() {
         return okClicked;
     }
+
 
     @FXML
     private void handleOk() {

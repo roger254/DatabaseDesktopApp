@@ -34,7 +34,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private void loadLoginPage() {
+    public void loadLoginPage() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("loginPage.fxml"));
@@ -43,9 +43,6 @@ public class Main extends Application {
             loginPageController.setPrimaryStage(primaryStage);
             loginPageController.setMain(this);
             scene = setPageScene(pane);
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,10 +55,6 @@ public class Main extends Application {
 
     public ObservableList<Medicine> getMedicineData() {
         return medicineData;
-    }
-
-    public void setMedicineData(ObservableList<Medicine> medicineData) {
-        this.medicineData = medicineData;
     }
 
     public Scene setPageScene(Pane pane) {
