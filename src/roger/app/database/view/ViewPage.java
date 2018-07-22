@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import roger.app.database.model.medicine.Medicine;
+import roger.app.database.model.medicine.MedicineHandler;
 import roger.app.database.model.utils.DateUtil;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class ViewPage {
     @FXML
     private TableColumn<Medicine, String> medicineNameColumn;
     @FXML
-    private TableColumn<Medicine, String> medicineQuantityColumn;
+    private TableColumn<Medicine, Integer> medicineQuantityColumn;
 
     @FXML
     private Label nameLabel;
@@ -41,7 +42,11 @@ public class ViewPage {
     @FXML
     private Label entryDateLabel;
 
+    @FXML
+    private ComboBox<String> checkOutBox;
+
     private Main main;
+
 
     private MenuPage menuPage;
 
@@ -51,20 +56,22 @@ public class ViewPage {
 
     private LoginPage loginPage;
 
+
     //called after fxml file has been loaded
     @FXML
     private void initialize() {
-        //get user access
+        //initialize data table
+        medicineTable.setItems(MedicineHandler.getMedicineInventorList());
 
         //initialize the medicine table with the two columns
         medicineNameColumn.setCellValueFactory((TableColumn.CellDataFeatures<Medicine, String> cellData) -> cellData.getValue().medicineNameProperty());
-        medicineQuantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityNameProperty());
+        medicineQuantityColumn.setCellValueFactory((TableColumn.CellDataFeatures<Medicine, Integer> cellData) -> cellData.getValue().quantityProperty().asObject());
 
         //clear medicine details
         showMedicineDetails(null);
 
         //double click item to add to checkout list
-        medicineNameColumn.setCellFactory(param -> {
+        medicineNameColumn.setCellFactory((TableColumn<Medicine, String> param) -> {
             TableCell<Medicine, String> cell = new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -75,16 +82,23 @@ public class ViewPage {
             };
             cell.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2) {
-                    Medicine tempMedicine = medicineTable.getSelectionModel().selectedItemProperty().getValue();
-                    tempMedicine.setQuantity(1);
-                    MenuPage.getCheckOutList().add(tempMedicine);
+                    Medicine selectedMedicine = medicineTable.getSelectionModel().selectedItemProperty().getValue();
+                    MedicineHandler.getMedicineCheckOutList().add(selectedMedicine);
                 }
             });
             return cell;
         });
-
+        /*
+        for integer and doubles
+        myIntegerColumn.setCellValueFactory(cellData ->
+      cellData.getValue().myIntegerProperty().asObject());
+         */
         //listen for selection changes and show the medicine details when changed
         medicineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showMedicineDetails(newValue));
+
+        for (Medicine medicine : MedicineHandler.getMedicineCheckOutList()) {
+            checkOutBox.getItems().add(medicine.getMedicineName());
+        }
     }
 
     @FXML
@@ -119,7 +133,7 @@ public class ViewPage {
         Medicine tempMedicine = new Medicine();
         okClicked = showMedicineEditDialog(tempMedicine);
         if (okClicked)
-            main.getMedicineData().add(tempMedicine);
+            MedicineHandler.getMedicineInventorList().add(tempMedicine);
     }
 
     @FXML
@@ -201,6 +215,6 @@ public class ViewPage {
 
     public void setMain(Main main) {
         this.main = main;
-        medicineTable.setItems(main.getMedicineData());
     }
+
 }

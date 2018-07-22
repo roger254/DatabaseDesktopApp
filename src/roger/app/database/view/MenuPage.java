@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import roger.app.database.model.medicine.Medicine;
+import roger.app.database.model.medicine.MedicineHandler;
 import roger.app.database.model.users.User;
 import roger.app.database.model.users.UserHandler;
 
@@ -45,10 +46,6 @@ public class MenuPage {
 
     private LoginPage loginPage;
 
-    public static ObservableList<Medicine> getCheckOutList() {
-        return checkOutList;
-    }
-
     //called after fxml is loaded
     @FXML
     private void initialize() {
@@ -72,8 +69,10 @@ public class MenuPage {
             SellPage sellPage = loader.getController();
             sellPage.setMain(main);
             sellPage.setLoginPage(loginPage);
+            sellPage.setMenuPage(this);
 
             Scene scene = new Scene(pane);
+            primaryStage.setTitle("Sell Page");
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
@@ -150,7 +149,7 @@ public class MenuPage {
     }
 
     @FXML
-    private void handleView() {
+    public void handleView() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("ViewPage.fxml"));
@@ -173,6 +172,7 @@ public class MenuPage {
     @FXML
     private void handleLogout() {
         userName = null;
+        MedicineHandler.getMedicineCheckOutList().removeAll(MedicineHandler.getMedicineCheckOutList()); //clear inventory after selling
         new Main().start(primaryStage);
     }
 
@@ -192,4 +192,5 @@ public class MenuPage {
     public void setLoginPage(LoginPage loginPage) {
         this.loginPage = loginPage;
     }
+
 }

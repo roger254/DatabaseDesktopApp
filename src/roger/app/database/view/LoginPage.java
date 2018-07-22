@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import roger.app.database.model.medicine.MedicineHandler;
 import roger.app.database.model.users.User;
 import roger.app.database.model.users.UserHandler;
 
@@ -88,8 +89,10 @@ public class LoginPage {
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
         result.ifPresent(userNamePassword -> {
-            if (validateUser(userNamePassword.getKey(), userNamePassword.getValue()))
+            if (validateUser(userNamePassword.getKey(), userNamePassword.getValue())) {
+                new MedicineHandler();
                 openMenu();
+            }
             else
                 showLoginDialog();
         });
