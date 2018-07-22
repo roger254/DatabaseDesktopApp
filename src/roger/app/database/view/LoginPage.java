@@ -98,8 +98,8 @@ public class LoginPage {
 
     //TODO: write validating code
     private boolean validateUser(String name, String password) {
-        UserHandler.addUsers(new User("Roger", "roger254", "admin"));
-        UserHandler.addUsers(new User("Ken", "ken254", "regularUser"));
+        UserHandler.addUsers(new User("Roger", "roger254", "ADMin"));
+        UserHandler.addUsers(new User("Ken", "ken254", "RegularUser"));
         for (User user : UserHandler.getUsers()) {
             if (user.getName().equals(name) && user.getPassword().equals(password)) {
                 userName = name;

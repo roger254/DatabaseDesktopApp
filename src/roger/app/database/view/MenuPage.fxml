@@ -17,7 +17,7 @@
                    <Button layoutX="818.0" layoutY="97.0" mnemonicParsing="false" onAction="#handleView" text="View"/>
                    <Button layoutX="569.0" layoutY="230.0" mnemonicParsing="false" onAction="#handleStatistics"
                            text="Statisctics"/>
-                   <Button layoutX="328.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleEdit"
+                   <Button layoutX="328.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleAddUser"
                            fx:id="addUserButton" text="Add User"/>
                    <Button layoutX="818.0" layoutY="353.0" mnemonicParsing="false" onAction="#handleLogout"
                            text="Logout"/>

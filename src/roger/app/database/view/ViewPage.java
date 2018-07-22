@@ -43,13 +43,13 @@ public class ViewPage {
 
     private Main main;
 
+    private MenuPage menuPage;
+
     private String userAccess;
 
     private boolean okClicked = false;
 
     private LoginPage loginPage;
-
-
 
     //called after fxml file has been loaded
     @FXML
@@ -57,7 +57,7 @@ public class ViewPage {
         //get user access
 
         //initialize the medicine table with the two columns
-        medicineNameColumn.setCellValueFactory((cellData) -> cellData.getValue().medicineNameProperty());
+        medicineNameColumn.setCellValueFactory((TableColumn.CellDataFeatures<Medicine, String> cellData) -> cellData.getValue().medicineNameProperty());
         medicineQuantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityNameProperty());
 
         //clear medicine details
@@ -76,8 +76,11 @@ public class ViewPage {
                 }
             };
             cell.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2)
-                    MenuPage.getCheckOutList().add(medicineTable.getSelectionModel().selectedItemProperty().getValue());
+                if (event.getClickCount() == 2) {
+                    Medicine tempMedicine = medicineTable.getSelectionModel().selectedItemProperty().getValue();
+                    tempMedicine.setQuantity(1);
+                    MenuPage.getCheckOutList().add(tempMedicine);
+                }
             });
             return cell;
         });
@@ -85,8 +88,7 @@ public class ViewPage {
 
     @FXML
     private void handleCheckout() {
-        for (Medicine medicine : MenuPage.getCheckOutList())
-            System.out.println(medicine.getMedicineName());
+        menuPage.handleSell();
     }
 
     //opens dialog to edit selected medicine details
@@ -119,18 +121,19 @@ public class ViewPage {
             main.getMedicineData().add(tempMedicine);
     }
 
+    @FXML
+    private void handleBack() {
+        loginPage.openMenu();
+    }
+
     public void setMenuPage(MenuPage menuPage) {
+        this.menuPage = menuPage;
         this.userAccess = menuPage.getUserAccess();
 
         if (!userAccess.equals("ADMIN"))
             editButton.setDisable(true);
         else
             editButton.setDisable(false);
-    }
-
-    @FXML
-    private void handleBack() {
-        loginPage.openMenu();
     }
 
     private void showMedicineDetails(Medicine medicine) {
