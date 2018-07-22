@@ -29,10 +29,6 @@ public class EditDialog {
     private Medicine medicine;
     private boolean okClicked = false;
 
-    @FXML
-    private void intialize() {
-    }
-
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }

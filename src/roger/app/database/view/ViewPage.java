@@ -63,8 +63,6 @@ public class ViewPage {
         //clear medicine details
         showMedicineDetails(null);
 
-        //listen for selection changes and show the medicine details when changed
-        medicineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showMedicineDetails(newValue));
         //double click item to add to checkout list
         medicineNameColumn.setCellFactory(param -> {
             TableCell<Medicine, String> cell = new TableCell<>() {
@@ -84,6 +82,9 @@ public class ViewPage {
             });
             return cell;
         });
+
+        //listen for selection changes and show the medicine details when changed
+        medicineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showMedicineDetails(newValue));
     }
 
     @FXML
