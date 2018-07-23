@@ -1,37 +1,21 @@
 package roger.app.database.view;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import javafx.util.Pair;
-import roger.app.database.model.medicine.Medicine;
 import roger.app.database.model.medicine.MedicineHandler;
 import roger.app.database.model.users.User;
 import roger.app.database.model.users.UserHandler;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
 public class MenuPage {
-
-    private static ObservableList<Medicine> checkOutList = FXCollections.observableArrayList();
-
-    private Stage primaryStage;
-
-    private String userName;
-
-    private String userAccess;
 
     @FXML
     private Label userNameLabel;
@@ -42,18 +26,12 @@ public class MenuPage {
     @FXML
     private Button addUserButton;
 
-    private Main main;
-
-    private LoginPage loginPage;
-
     //called after fxml is loaded
     @FXML
     private void initialize() {
-        this.userName = LoginPage.getUserName();
-        this.userAccess = Objects.requireNonNull(UserHandler.getUserAccess(userName)).toUpperCase();
-        userNameLabel.setText(userName);
-        userAccessLabel.setText(userAccess);
-        if (!userAccess.equals("ADMIN"))
+        userNameLabel.setText(UserHandler.getCurrentUserName());
+        userAccessLabel.setText(UserHandler.getCurrentUserAccess());
+        if (!Objects.requireNonNull(UserHandler.getCurrentUserAccess()).equals("ADMIN"))
             addUserButton.setDisable(true);
         else
             addUserButton.setDisable(false);
@@ -61,23 +39,7 @@ public class MenuPage {
 
     @FXML
     public void handleSell() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("SellPage.fxml"));
-            AnchorPane pane = loader.load();
-
-            SellPage sellPage = loader.getController();
-            sellPage.setMain(main);
-            sellPage.setLoginPage(loginPage);
-            sellPage.setMenuPage(this);
-
-            Scene scene = new Scene(pane);
-            primaryStage.setTitle("Sell Page");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ViewHandler.loadSellPage();
     }
 
     @FXML
@@ -145,52 +107,18 @@ public class MenuPage {
             String newUserPassword = userNamePassword.getValue();
             UserHandler.addUsers(new User(newUserName, newUserPassword, choiceBox.getValue()));
         });
-
     }
 
     @FXML
     public void handleView() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("ViewPage.fxml"));
-            AnchorPane pane = loader.load();
-
-            ViewPage viewPage = loader.getController();
-            viewPage.setPrimaryStage(primaryStage);
-            viewPage.setMain(main);
-            viewPage.setMenuPage(this);
-            viewPage.setLoginPage(loginPage);
-
-            Scene scene = new Scene(pane);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ViewHandler.loadViewPage();
     }
 
     @FXML
     private void handleLogout() {
-        userName = null;
+        UserHandler.logoutUser();
+        MedicineHandler.handleCancelCheckOut();
         MedicineHandler.getMedicineCheckOutList().removeAll(MedicineHandler.getMedicineCheckOutList()); //clear inventory after selling
-        new Main().start(primaryStage);
+        ViewHandler.loadLoginPage();
     }
-
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        primaryStage.setTitle("Menu Page");
-    }
-
-    public void setMain(Main main) {
-        this.main = main;
-    }
-
-    public String getUserAccess() {
-        return userAccess;
-    }
-
-    public void setLoginPage(LoginPage loginPage) {
-        this.loginPage = loginPage;
-    }
-
 }

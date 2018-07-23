@@ -24,19 +24,17 @@ public class SellPage {
     @FXML
     private Button sellButton;
 
-    private Main main;
-
-    private MenuPage menuPage;
-
-    @FXML
-    private LoginPage loginPage;
-
     @FXML
     private void initialize() {
         medicineTableView.setItems(MedicineHandler.getMedicineCheckOutList());
         nameTableColumn.setCellValueFactory((cellData) -> cellData.getValue().medicineNameProperty());
         priceTableColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
         quantityTableColumn.setCellValueFactory(cellData -> cellData.getValue().quantityNameProperty());
+
+        if (MedicineHandler.getMedicineCheckOutList().size() < 1)
+            sellButton.setDisable(true);
+        else
+            sellButton.setDisable(false);
     }
 
     @FXML
@@ -54,27 +52,11 @@ public class SellPage {
 
     @FXML
     private void handleBack() {
-        loginPage.openMenu();
+        ViewHandler.loadMenuPage();
     }
 
     @FXML
     private void handleToView() {
-        menuPage.handleSell();
-    }
-
-    public void setMain(Main main) {
-        this.main = main;
-        if (MedicineHandler.getMedicineCheckOutList().size() < 1)
-            sellButton.setDisable(true);
-        else
-            sellButton.setDisable(false);
-    }
-
-    public void setLoginPage(LoginPage loginPage) {
-        this.loginPage = loginPage;
-    }
-
-    public void setMenuPage(MenuPage menuPage) {
-        this.menuPage = menuPage;
+        ViewHandler.loadViewPage();
     }
 }

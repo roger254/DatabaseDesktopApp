@@ -9,13 +9,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import roger.app.database.model.medicine.Medicine;
 import roger.app.database.model.medicine.MedicineHandler;
+import roger.app.database.model.users.UserHandler;
 import roger.app.database.model.utils.DateUtil;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ViewPage {
-
-    private Stage primaryStage;
 
     @FXML
     private TableView<Medicine> medicineTable;
@@ -43,18 +43,9 @@ public class ViewPage {
     private Label entryDateLabel;
 
     @FXML
-    private ComboBox<String> checkOutBox;
-
-    private Main main;
-
-
-    private MenuPage menuPage;
-
-    private String userAccess;
+    private ComboBox<Medicine> checkOutBox;
 
     private boolean okClicked = false;
-
-    private LoginPage loginPage;
 
 
     //called after fxml file has been loaded
@@ -70,6 +61,21 @@ public class ViewPage {
         //clear medicine details
         showMedicineDetails(null);
 
+        /*
+        for integer and doubles
+        myIntegerColumn.setCellValueFactory(cellData ->
+      cellData.getValue().myIntegerProperty().asObject());
+         */
+        //listen for selection changes and show the medicine details when changed
+        medicineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showMedicineDetails(newValue));
+
+        checkOutBox.getItems().addAll(MedicineHandler.getMedicineCheckOutList());
+
+        if (!Objects.requireNonNull(UserHandler.getCurrentUserAccess()).equals("ADMIN"))
+            editButton.setDisable(true);
+        else
+            editButton.setDisable(false);
+
         //double click item to add to checkout list
         medicineNameColumn.setCellFactory((TableColumn<Medicine, String> param) -> {
             TableCell<Medicine, String> cell = new TableCell<>() {
@@ -82,33 +88,24 @@ public class ViewPage {
             };
             cell.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2) {
-                    Medicine selectedMedicine = medicineTable.getSelectionModel().selectedItemProperty().getValue();
-                    MedicineHandler.getMedicineCheckOutList().add(selectedMedicine);
+                    Medicine selectedMedicine = medicineTable.getSelectionModel().selectedItemProperty().get();
+                    //todo: prompt user for this amount
+                    MedicineHandler.addToCheckOut(selectedMedicine, ViewHandler.amountPrompt(selectedMedicine));
                 }
             });
             return cell;
         });
-        /*
-        for integer and doubles
-        myIntegerColumn.setCellValueFactory(cellData ->
-      cellData.getValue().myIntegerProperty().asObject());
-         */
-        //listen for selection changes and show the medicine details when changed
-        medicineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showMedicineDetails(newValue));
-
-        for (Medicine medicine : MedicineHandler.getMedicineCheckOutList()) {
-            checkOutBox.getItems().add(medicine.getMedicineName());
-        }
     }
 
     @FXML
     private void handleCheckout() {
-        menuPage.handleSell();
+        ViewHandler.loadSellPage();
     }
 
     //opens dialog to edit selected medicine details
     @FXML
     private void handleEdit() {
+
         Medicine selectedMedicine = medicineTable.getSelectionModel().getSelectedItem();
         if (selectedMedicine != null) {
             okClicked = showMedicineEditDialog(selectedMedicine);
@@ -138,17 +135,7 @@ public class ViewPage {
 
     @FXML
     private void handleBack() {
-        loginPage.openMenu();
-    }
-
-    public void setMenuPage(MenuPage menuPage) {
-        this.menuPage = menuPage;
-        this.userAccess = menuPage.getUserAccess();
-
-        if (!userAccess.equals("ADMIN"))
-            editButton.setDisable(true);
-        else
-            editButton.setDisable(false);
+        ViewHandler.loadMenuPage();
     }
 
     private void showMedicineDetails(Medicine medicine) {
@@ -178,7 +165,7 @@ public class ViewPage {
             Stage editStage = new Stage();
             editStage.setTitle("Edit Item");
             editStage.initModality(Modality.WINDOW_MODAL);
-            editStage.initOwner(main.getPrimaryStage());
+            //      editStage.initOwner(main.getPrimaryStage());
             Scene scene = new Scene(pane);
             editStage.setScene(scene);
 
@@ -196,25 +183,11 @@ public class ViewPage {
         }
     }
 
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        primaryStage.setTitle("View Page");
-    }
-
     private void warningAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.initOwner(main.getPrimaryStage());
+        //   alert.initOwner(main.getPrimaryStage());
         alert.setTitle("No Selection");
         alert.setHeaderText("No Medicine Selected");
         alert.setContentText("Please select an item in the table");
     }
-
-    public void setLoginPage(LoginPage loginPage) {
-        this.loginPage = loginPage;
-    }
-
-    public void setMain(Main main) {
-        this.main = main;
-    }
-
 }

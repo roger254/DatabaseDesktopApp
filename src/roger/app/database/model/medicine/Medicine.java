@@ -93,4 +93,9 @@ public class Medicine {
     public StringProperty medicineDescriptionProperty() {
         return medicineDescription;
     }
+
+    @Override
+    public String toString() {
+        return medicineNameProperty().toString();
+    }
 }
