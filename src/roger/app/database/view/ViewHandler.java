@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import roger.app.database.model.medicine.Medicine;
 
@@ -94,5 +95,33 @@ public class ViewHandler {
         if (amountInput.isPresent())
             amount = Integer.parseInt(amountInput.get());
         return amount;
+    }
+
+    public static boolean showMedicineEditDialog(Medicine medicine) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(ViewHandler.class.getResource("EditDialog.fxml"));
+            AnchorPane pane = loader.load();
+
+            //create dialog Stage
+            Stage editStage = new Stage();
+            editStage.setTitle("Edit Item");
+            editStage.initModality(Modality.WINDOW_MODAL);
+            //      editStage.initOwner(main.getPrimaryStage());
+            Scene scene = new Scene(pane);
+            editStage.setScene(scene);
+
+            //set The medicine dialog controller
+            EditDialog editDialogController = loader.getController();
+            editDialogController.setDialogStage(editStage);
+            editDialogController.setMedicine(medicine);
+
+            editStage.showAndWait();
+
+            return editDialogController.isOkClicked();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
