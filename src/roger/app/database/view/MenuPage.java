@@ -7,11 +7,13 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 import javafx.util.Pair;
 import roger.app.database.model.medicine.MedicineHandler;
 import roger.app.database.model.users.User;
 import roger.app.database.model.users.UserHandler;
 
+import java.io.File;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -119,6 +121,36 @@ public class MenuPage {
         UserHandler.logoutUser();
         MedicineHandler.handleCancelCheckOut();
         MedicineHandler.getMedicineCheckOutList().removeAll(MedicineHandler.getMedicineCheckOutList()); //clear inventory after selling
+        handleSave();
         ViewHandler.loadLoginPage();
+    }
+
+    private void handleSave() {
+        File medicineFile = MedicineHandler.getMedicineFilePath();
+        if (medicineFile != null) {
+            MedicineHandler.saveMedicineDataToFile(medicineFile);
+        } else {
+            handleSaveAs();
+        }
+    }
+
+    private void handleSaveAs() {
+        FileChooser fileChooser = new FileChooser();
+
+        // Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                "XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show save file dialog
+        File file = fileChooser.showSaveDialog(ViewHandler.getPrimaryStage());
+
+        if (file != null) {
+            // Make sure it has the correct extension
+            if (!file.getPath().endsWith(".xml")) {
+                file = new File(file.getPath() + ".xml");
+            }
+            MedicineHandler.saveMedicineDataToFile(file);
+        }
     }
 }

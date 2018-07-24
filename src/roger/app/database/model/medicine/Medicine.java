@@ -2,6 +2,7 @@ package roger.app.database.model.medicine;
 
 import javafx.beans.property.*;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 
 public class Medicine {
@@ -82,6 +83,7 @@ public class Medicine {
         return quantity;
     }
 
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
     public LocalDate getEntryDate() {
         return entryDate.get();
     }

@@ -8,7 +8,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import roger.app.database.model.medicine.Medicine;
+import roger.app.database.model.medicine.MedicineHandler;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -16,11 +18,16 @@ public class ViewHandler {
 
     private static Stage primaryStage;
 
+    public ViewHandler() {
+
+    }
+
     public ViewHandler(Stage stage) {
         primaryStage = stage;
     }
 
     public static void loadLoginPage() {
+
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ViewHandler.class.getResource("loginPage.fxml"));
@@ -34,6 +41,10 @@ public class ViewHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        File file = MedicineHandler.getMedicineFilePath();
+        if (file != null)
+            MedicineHandler.loadMedicineDataFromFile(file);
     }
 
     public static void loadMenuPage() {
@@ -141,5 +152,9 @@ public class ViewHandler {
             alert.setHeaderText("There are only " + medicine.getQuantity() + " " + medicine.getMedicineName() + "s left");
         alert.setContentText("Please enter a valid amount");
         alert.showAndWait();
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 }

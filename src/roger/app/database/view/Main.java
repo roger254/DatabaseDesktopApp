@@ -7,7 +7,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        new ViewHandler(primaryStage);
+        ViewHandler viewHandler = new ViewHandler(primaryStage);
+
         ViewHandler.loadLoginPage();
     }
 
