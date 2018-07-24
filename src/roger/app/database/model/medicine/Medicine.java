@@ -13,6 +13,7 @@ public class Medicine {
     private final BooleanProperty checkOut;
     private final IntegerProperty quantityToSell;
     private boolean isToBeSold;
+    private int previousQuantity;
 
     public Medicine() {
         medicineName = new SimpleStringProperty("");
@@ -23,6 +24,7 @@ public class Medicine {
         checkOut = new SimpleBooleanProperty(false);
         quantityToSell = new SimpleIntegerProperty(0);
         isToBeSold = false;
+        previousQuantity = 0;
     }
 
     public Medicine(String medicineName, double price, int quantity) {
@@ -37,6 +39,7 @@ public class Medicine {
         checkOut = new SimpleBooleanProperty(false);
         quantityToSell = new SimpleIntegerProperty(0);
         isToBeSold = false;
+        previousQuantity = 0;
     }
 
     public StringProperty quantityNameProperty() {
@@ -133,6 +136,14 @@ public class Medicine {
 
     public void setToBeSold(boolean toBeSold) {
         isToBeSold = toBeSold;
+    }
+
+    public int getPrevoiusQuantity() {
+        return previousQuantity;
+    }
+
+    public void setPrevoiusQuantity(int prevoiusQuantity) {
+        this.previousQuantity = prevoiusQuantity;
     }
 
     @Override

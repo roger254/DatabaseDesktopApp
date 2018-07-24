@@ -141,6 +141,5 @@ public class ViewHandler {
             alert.setHeaderText("There are only " + medicine.getQuantity() + " " + medicine.getMedicineName() + "s left");
         alert.setContentText("Please enter a valid amount");
         alert.showAndWait();
-        amountPrompt(medicine);
     }
 }

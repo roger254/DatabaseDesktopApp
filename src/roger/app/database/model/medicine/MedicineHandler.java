@@ -46,19 +46,21 @@ public class MedicineHandler {
     public static void addToCheckOut(Medicine medicine, int amount) {
         medicine.setQuantityToSell(amount);
         medicine.setToBeSold(true);
-        previousQuantity = medicine.getQuantity();
+        medicine.setPrevoiusQuantity(medicine.getQuantity());
         if (medicine.isToBeSold())
-            medicine.setQuantity(previousQuantity - amount);
+            medicine.setQuantity(medicine.getPrevoiusQuantity() - amount);
         medicineCheckOutList.add(medicine);
     }
 
     public static void restoreDetails() {
         if (medicineCheckOutList.size() > 0) {
             for (Medicine medicine : medicineCheckOutList) {
-                if (!medicine.isCheckOut())
-                    medicine.setQuantity(previousQuantity);
+                if (!medicine.isCheckOut()) {
+                    medicine.setQuantity(medicine.getPrevoiusQuantity());
+                }
             }
         }
+        medicineCheckOutList.removeIf(medicine1 -> !medicine1.isCheckOut());
     }
 
     public static void handleCancelCheckOut() {
