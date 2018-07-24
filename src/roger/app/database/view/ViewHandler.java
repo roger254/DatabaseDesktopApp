@@ -2,6 +2,7 @@ package roger.app.database.view;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -92,8 +93,13 @@ public class ViewHandler {
         dialog.setContentText("Please the amount:");
         int amount = 0;
         Optional<String> amountInput = dialog.showAndWait();
-        if (amountInput.isPresent())
+        if (amountInput.isPresent()) {
             amount = Integer.parseInt(amountInput.get());
+            if (amount > medicine.getQuantity() || amount < 1) {
+                alertPrompt(medicine);
+                return 0;
+            }
+        }
         return amount;
     }
 
@@ -123,5 +129,18 @@ public class ViewHandler {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private static void alertPrompt(Medicine medicine) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(primaryStage);
+        alert.setTitle("Invalid Exceeded");
+        if (medicine.getQuantity() == 1)
+            alert.setHeaderText("There is only " + medicine.getQuantity() + " " + medicine.getMedicineName() + " left");
+        else
+            alert.setHeaderText("There are only " + medicine.getQuantity() + " " + medicine.getMedicineName() + "s left");
+        alert.setContentText("Please enter a valid amount");
+        alert.showAndWait();
+        amountPrompt(medicine);
     }
 }

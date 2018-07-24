@@ -11,6 +11,7 @@ public class Medicine {
     private final ObjectProperty<LocalDate> entryDate;
     private final StringProperty medicineDescription;
     private final BooleanProperty checkOut;
+    private final IntegerProperty quantityToSell;
 
     public Medicine() {
         medicineName = new SimpleStringProperty("");
@@ -19,6 +20,7 @@ public class Medicine {
         quantity = new SimpleIntegerProperty(0);
         entryDate = new SimpleObjectProperty<>(LocalDate.now());
         checkOut = new SimpleBooleanProperty(false);
+        quantityToSell = new SimpleIntegerProperty(0);
     }
 
     public Medicine(String medicineName, double price, int quantity) {
@@ -31,6 +33,7 @@ public class Medicine {
         int year = 2000, month = 10, date = 12;
         this.entryDate = new SimpleObjectProperty<>(LocalDate.of(year, month, date));
         checkOut = new SimpleBooleanProperty(false);
+        quantityToSell = new SimpleIntegerProperty(0);
     }
 
     public StringProperty quantityNameProperty() {
@@ -107,6 +110,18 @@ public class Medicine {
 
     public BooleanProperty checkOutProperty() {
         return checkOut;
+    }
+
+    public int getQuantityToSell() {
+        return quantityToSell.get();
+    }
+
+    public void setQuantityToSell(int quantityToSell) {
+        this.quantityToSell.set(quantityToSell);
+    }
+
+    public IntegerProperty quantityToSellProperty() {
+        return quantityToSell;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class SellPage {
     private TableColumn<Medicine, Double> priceTableColumn;
 
     @FXML
-    private TableColumn<Medicine, String> quantityTableColumn;
+    private TableColumn<Medicine, Integer> quantityTableColumn;
 
     @FXML
     private Button sellButton;
@@ -29,7 +29,7 @@ public class SellPage {
         medicineTableView.setItems(MedicineHandler.getMedicineCheckOutList());
         nameTableColumn.setCellValueFactory((cellData) -> cellData.getValue().medicineNameProperty());
         priceTableColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
-        quantityTableColumn.setCellValueFactory(cellData -> cellData.getValue().quantityNameProperty());
+        quantityTableColumn.setCellValueFactory(cellData -> cellData.getValue().quantityToSellProperty().asObject());
 
         if (MedicineHandler.getMedicineCheckOutList().size() < 1)
             sellButton.setDisable(true);
@@ -43,6 +43,7 @@ public class SellPage {
             if (medicine.getQuantity() > 1) { //if the quantity is more than 1
                 int currentQuantity = medicine.getQuantity() - 1; //remove one from the quantity
                 medicine.setQuantity(currentQuantity); //update quantity
+                medicine.setCheckOut(false);
             } else if (medicine.getQuantity() <= 1) { //if quantity is one remove from inventory
                 MedicineHandler.getMedicineInventorList().remove(medicine); //remove it from inventory
             }

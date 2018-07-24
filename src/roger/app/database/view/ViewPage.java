@@ -1,11 +1,8 @@
 package roger.app.database.view;
 
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.util.Callback;
 import roger.app.database.model.medicine.Medicine;
 import roger.app.database.model.medicine.MedicineHandler;
 import roger.app.database.model.users.UserHandler;
@@ -42,9 +39,6 @@ public class ViewPage {
     @FXML
     private Label entryDateLabel;
 
-    @FXML
-    private ComboBox<Medicine> checkOutBox;
-
     private boolean okClicked = false;
 
     //called after fxml file has been loaded
@@ -53,6 +47,11 @@ public class ViewPage {
 
         initTable();
 
+    }
+
+    @FXML
+    private void handleRefresh() {
+        initTable();
     }
 
     @FXML
@@ -103,33 +102,24 @@ public class ViewPage {
         medicineNameColumn.setCellValueFactory((TableColumn.CellDataFeatures<Medicine, String> cellData) -> cellData.getValue().medicineNameProperty());
         medicineQuantityColumn.setCellValueFactory((TableColumn.CellDataFeatures<Medicine, Integer> cellData) -> cellData.getValue().quantityProperty().asObject());
 
-
-        checkOutColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Medicine, CheckBox>, ObservableValue<CheckBox>>() {
-            @Override
-            public ObservableValue<CheckBox> call(
-                    TableColumn.CellDataFeatures<Medicine, CheckBox> arg0) {
-                final Medicine[] medicine = {arg0.getValue()};
-                CheckBox checkBox = new CheckBox();
-                checkBox.selectedProperty().setValue(medicine[0].isCheckOut());
-                checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                    public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
-                        medicine[0].setCheckOut(new_val);
-                        medicine[0] = medicineTable.getSelectionModel().selectedItemProperty().get();
-                        MedicineHandler.addToCheckOut(medicine[0], ViewHandler.amountPrompt(medicine[0]));
-                    }
-                });
-                return new SimpleObjectProperty<CheckBox>(checkBox);
-            }
+        checkOutColumn.setCellValueFactory(arg0 -> {
+            Medicine medicine = arg0.getValue();
+            CheckBox checkBox = new CheckBox();
+            checkBox.setSelected(false);
+            checkBox.selectedProperty().setValue(medicine.isCheckOut());
+            checkBox.selectedProperty().addListener((ov, old_val, new_val) -> medicine.setCheckOut(new_val));
+            checkBox.setOnAction(event -> {
+                if (checkBox.isSelected())
+                    MedicineHandler.addToCheckOut(medicine, ViewHandler.amountPrompt(medicine));
+            });
+            return new SimpleObjectProperty<>(checkBox);
         });
-
 
         //checkOutColumn.setCellFactory(new SimpleObjectProperty<Boolean>(false));
         showMedicineDetails(null);
 
         //listen for selection changes and show the medicine details when changed
         medicineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showMedicineDetails(newValue));
-
-        checkOutBox.getItems().addAll(MedicineHandler.getMedicineCheckOutList());
 
         if (!Objects.requireNonNull(UserHandler.getCurrentUserAccess()).equals("ADMIN"))
             editButton.setDisable(true);
@@ -164,6 +154,4 @@ public class ViewPage {
         alert.setHeaderText("No Medicine Selected");
         alert.setContentText("Please select an item in the table");
     }
-
-
 }

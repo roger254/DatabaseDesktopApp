@@ -39,10 +39,12 @@ public class MedicineHandler {
     }
 
     public static ObservableList<Medicine> getMedicineCheckOutList() {
+        medicineCheckOutList.removeIf(medicine1 -> !medicine1.isCheckOut());
         return medicineCheckOutList;
     }
 
     public static void addToCheckOut(Medicine medicine, int amount) {
+        medicine.setQuantityToSell(amount);
         prevousAmount = medicine.getQuantity();
         medicine.setQuantity(prevousAmount - amount);
         medicineCheckOutList.add(medicine);

@@ -3,8 +3,9 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="800.0"
-            xmlns="http://javafx.com/javafx/8.0.171" fx:controller="roger.app.database.view.ViewPage">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0"
+            prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171"
+            fx:controller="roger.app.database.view.ViewPage">
    <children>
       <SplitPane dividerPositions="0.3308270676691729" layoutX="117.0" layoutY="114.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -75,7 +76,7 @@
                                                prefWidth="200.0" wrapText="true" GridPane.columnIndex="1"
                                                GridPane.rowIndex="1">
                                          <GridPane.margin>
-                                             <Insets/>
+                                             <Insets right="5.0"/>
                                          </GridPane.margin>
                                      </TextArea>
                                      <Label fx:id="nameLabel" text="Label" GridPane.columnIndex="1">
@@ -106,9 +107,9 @@
                                        <Insets/>
                                    </opaqueInsets>
                               </GridPane>
-                               <Label layoutX="163.0" layoutY="23.0" text="Check out List:"/>
-                               <ComboBox fx:id="checkOutBox" layoutX="289.0" layoutY="21.0" prefWidth="150.0"
-                                         promptText="Check Out"/>
+                               <Label layoutX="264.0" layoutY="28.0" text="MEDICINE DETAILS:"/>
+                               <Button layoutX="14.0" layoutY="23.0" mnemonicParsing="false" onAction="#handleRefresh"
+                                       text="Refresh"/>
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
