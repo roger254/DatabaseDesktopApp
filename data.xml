@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<medicines>
+    <medicine>
+        <checkOut>false</checkOut>
+        <entryDate>2000-10-12</entryDate>
+        <medicineDescription>Med description</medicineDescription>
+        <medicineName>Piriton</medicineName>
+        <prevoiusQuantity>0</prevoiusQuantity>
+        <price>45.5</price>
+        <quantity>1</quantity>
+        <quantityToSell>0</quantityToSell>
+        <toBeSold>false</toBeSold>
+    </medicine>
+    <medicine>
+        <checkOut>false</checkOut>
+        <entryDate>2000-10-12</entryDate>
+        <medicineDescription>Med description</medicineDescription>
+        <medicineName>Ken</medicineName>
+        <prevoiusQuantity>0</prevoiusQuantity>
+        <price>50.0</price>
+        <quantity>2</quantity>
+        <quantityToSell>0</quantityToSell>
+        <toBeSold>false</toBeSold>
+    </medicine>
+    <medicine>
+        <checkOut>false</checkOut>
+        <entryDate>2000-10-12</entryDate>
+        <medicineDescription>Med description</medicineDescription>
+        <medicineName>Roger</medicineName>
+        <prevoiusQuantity>0</prevoiusQuantity>
+        <price>55.5</price>
+        <quantity>6</quantity>
+        <quantityToSell>0</quantityToSell>
+        <toBeSold>false</toBeSold>
+    </medicine>
+    <medicine>
+        <checkOut>false</checkOut>
+        <entryDate>2000-10-12</entryDate>
+        <medicineDescription>Med description</medicineDescription>
+        <medicineName>FluGone</medicineName>
+        <prevoiusQuantity>0</prevoiusQuantity>
+        <price>67.5</price>
+        <quantity>5</quantity>
+        <quantityToSell>0</quantityToSell>
+        <toBeSold>false</toBeSold>
+    </medicine>
+    <medicine>
+        <checkOut>false</checkOut>
+        <entryDate>2018-07-24</entryDate>
+        <medicineDescription>Painkiller</medicineDescription>
+        <medicineName>Maramoja</medicineName>
+        <prevoiusQuantity>45</prevoiusQuantity>
+        <price>10.0</price>
+        <quantity>24</quantity>
+        <quantityToSell>20</quantityToSell>
+        <toBeSold>false</toBeSold>
+    </medicine>
+</medicines>
