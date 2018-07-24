@@ -18,45 +18,32 @@ public class ViewHandler {
 
     private static Stage primaryStage;
 
-    public ViewHandler() {
-
-    }
-
-    public ViewHandler(Stage stage) {
+    ViewHandler(Stage stage) {
         primaryStage = stage;
     }
 
-    public static void loadLoginPage() {
+    static void loadLoginPage() {
 
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ViewHandler.class.getResource("loginPage.fxml"));
             AnchorPane pane = loader.load();
-
-            LoginPage loginPageController = loader.getController();
-
+            loader.getController();
             primaryStage.setTitle("Login Page");
             primaryStage.setScene(new Scene(pane));
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        File file = MedicineHandler.getMedicineFilePath();
-        if (file != null)
-            MedicineHandler.loadMedicineDataFromFile(file);
+        MedicineHandler.loadMedicineData();
     }
 
-    public static void loadMenuPage() {
+    static void loadMenuPage() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ViewHandler.class.getResource("MenuPage.fxml"));
             AnchorPane pane = loader.load();
-            //    menuStage.initModality(Modality.WINDOW_MODAL);
-            // menuStage.initOwner(primaryStage);
-
-            MenuPage menuPage = loader.getController();
-
+            loader.getController();
             primaryStage.setTitle("Menu Page");
             primaryStage.setScene(new Scene(pane));
             primaryStage.show();
@@ -65,14 +52,12 @@ public class ViewHandler {
         }
     }
 
-    public static void loadSellPage() {
+    static void loadSellPage() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ViewHandler.class.getResource("SellPage.fxml"));
             AnchorPane pane = loader.load();
-
-            SellPage sellPage = loader.getController();
-
+            loader.getController();
             primaryStage.setTitle("Sell Page");
             primaryStage.setScene(new Scene(pane));
             primaryStage.show();
@@ -81,14 +66,12 @@ public class ViewHandler {
         }
     }
 
-    public static void loadViewPage() {
+    static void loadViewPage() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ViewHandler.class.getResource("ViewPage.fxml"));
             AnchorPane pane = loader.load();
-
-            ViewPage viewPage = loader.getController();
-
+            loader.getController();
             primaryStage.setTitle("View Page");
             primaryStage.setScene(new Scene(pane));
             primaryStage.show();
@@ -97,7 +80,7 @@ public class ViewHandler {
         }
     }
 
-    public static int amountPrompt(Medicine medicine) {
+    static int amountPrompt(Medicine medicine) {
         TextInputDialog dialog = new TextInputDialog("Amount");
         dialog.setTitle("Enter Amount");
         dialog.setHeaderText("There are " + medicine.getQuantity() + " " + medicine.getMedicineName() + " left");
@@ -114,7 +97,7 @@ public class ViewHandler {
         return amount;
     }
 
-    public static boolean showMedicineEditDialog(Medicine medicine) {
+    static boolean showMedicineEditDialog(Medicine medicine) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ViewHandler.class.getResource("EditDialog.fxml"));
@@ -156,5 +139,14 @@ public class ViewHandler {
 
     public static Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public static void showAlert(File file) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Could not save data");
+        alert.setContentText("Could not save data to file:\n" + file.getPath());
+
+        alert.showAndWait();
     }
 }

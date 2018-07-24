@@ -3,6 +3,8 @@ package roger.app.database.model.medicine;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
+import roger.app.database.view.ViewHandler;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,7 +17,6 @@ public class MedicineHandler {
 
     private static ObservableList<Medicine> medicineInventorList = FXCollections.observableArrayList();
     private static ObservableList<Medicine> medicineCheckOutList = FXCollections.observableArrayList();
-
 
     public static int getMedicineQuantity(Medicine medicine) {
         for (Medicine medicine1 : medicineInventorList) {
@@ -54,7 +55,7 @@ public class MedicineHandler {
         medicineCheckOutList.removeIf(medicine1 -> !medicine1.isCheckOut());
     }
 
-    public static void handleCancelCheckOut() {
+    private static void handleCancelCheckOut() {
         if (medicineCheckOutList.size() > 0)
             for (Medicine medicine : medicineCheckOutList) {
                 if (medicine.getQuantity() == medicine.getPrevoiusQuantity())
@@ -64,11 +65,17 @@ public class MedicineHandler {
             }
     }
 
+    public static void loadMedicineData() {
+        File file = MedicineHandler.getMedicineFilePath();
+        if (file != null)
+            MedicineHandler.loadMedicineDataFromFile(file);
+    }
+
     /*
     Returns the person file preference i.e. the file that was last opened.
     the preference is read from the OS registry
      */
-    public static File getMedicineFilePath() {
+    private static File getMedicineFilePath() {
         Preferences preferences = Preferences.userNodeForPackage(MedicineHandler.class);
         String filePath = preferences.get("filePath", null);
         if (filePath != null)
@@ -81,7 +88,7 @@ public class MedicineHandler {
     Sets the file path of the currently loaded file
     is persisted in the os specific registry
      */
-    public static void setMedicineFilePath(File file) {
+    private static void setMedicineFilePath(File file) {
         Preferences preferences = Preferences.userNodeForPackage(MedicineHandler.class);
         if (file != null)
             preferences.put("filePath", file.getPath());
@@ -90,7 +97,7 @@ public class MedicineHandler {
     }
 
     //load medicine data from specified file
-    public static void loadMedicineDataFromFile(File file) {
+    private static void loadMedicineDataFromFile(File file) {
         try {
             JAXBContext context = JAXBContext.newInstance(MedicineWrapper.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -112,7 +119,7 @@ public class MedicineHandler {
         }
     }
 
-    public static void saveMedicineDataToFile(File file) {
+    private static void saveMedicineDataToFile(File file) {
         try {
             JAXBContext context = JAXBContext
                     .newInstance(MedicineWrapper.class);
@@ -129,12 +136,39 @@ public class MedicineHandler {
             // Save the file path to the registry.
             setMedicineFilePath(file);
         } catch (Exception e) { // catches ANY exception
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Could not save data");
-            alert.setContentText("Could not save data to file:\n" + file.getPath());
-
-            alert.showAndWait();
+            ViewHandler.showAlert(file);
         }
+    }
+
+    private static void handleSave() {
+
+        File medicineFile = MedicineHandler.getMedicineFilePath();
+        if (medicineFile != null) {
+            MedicineHandler.saveMedicineDataToFile(medicineFile);
+        } else {
+            FileChooser fileChooser = new FileChooser();
+
+            // Set extension filter
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                    "XML files (*.xml)", "*.xml");
+            fileChooser.getExtensionFilters().add(extFilter);
+
+            // Show save file dialog
+            File file = fileChooser.showSaveDialog(ViewHandler.getPrimaryStage());
+
+            if (file != null) {
+                // Make sure it has the correct extension
+                if (!file.getPath().endsWith(".xml")) {
+                    file = new File(file.getPath() + ".xml");
+                }
+                MedicineHandler.saveMedicineDataToFile(file);
+            }
+        }
+    }
+
+    public static void handleLogout() {
+        handleCancelCheckOut();
+        getMedicineCheckOutList().removeAll(MedicineHandler.getMedicineCheckOutList()); //clear inventory after selling
+        handleSave();
     }
 }
