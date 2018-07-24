@@ -10,6 +10,7 @@ public class Medicine {
     private final IntegerProperty quantity;
     private final ObjectProperty<LocalDate> entryDate;
     private final StringProperty medicineDescription;
+    private final BooleanProperty checkOut;
 
     public Medicine() {
         medicineName = new SimpleStringProperty("");
@@ -17,6 +18,7 @@ public class Medicine {
         price = new SimpleDoubleProperty(0.0);
         quantity = new SimpleIntegerProperty(0);
         entryDate = new SimpleObjectProperty<>(LocalDate.now());
+        checkOut = new SimpleBooleanProperty(false);
     }
 
     public Medicine(String medicineName, double price, int quantity) {
@@ -28,6 +30,7 @@ public class Medicine {
         this.medicineDescription = new SimpleStringProperty(medicineDescription);
         int year = 2000, month = 10, date = 12;
         this.entryDate = new SimpleObjectProperty<>(LocalDate.of(year, month, date));
+        checkOut = new SimpleBooleanProperty(false);
     }
 
     public StringProperty quantityNameProperty() {
@@ -92,6 +95,18 @@ public class Medicine {
 
     public StringProperty medicineDescriptionProperty() {
         return medicineDescription;
+    }
+
+    public boolean isCheckOut() {
+        return checkOut.get();
+    }
+
+    public void setCheckOut(boolean checkOut) {
+        this.checkOut.set(checkOut);
+    }
+
+    public BooleanProperty checkOutProperty() {
+        return checkOut;
     }
 
     @Override

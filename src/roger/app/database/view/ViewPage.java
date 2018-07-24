@@ -1,7 +1,11 @@
 package roger.app.database.view;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 import roger.app.database.model.medicine.Medicine;
 import roger.app.database.model.medicine.MedicineHandler;
 import roger.app.database.model.users.UserHandler;
@@ -17,6 +21,8 @@ public class ViewPage {
     private TableColumn<Medicine, String> medicineNameColumn;
     @FXML
     private TableColumn<Medicine, Integer> medicineQuantityColumn;
+    @FXML
+    private TableColumn<Medicine, CheckBox> checkOutColumn;
 
     @FXML
     private Label nameLabel;
@@ -44,29 +50,9 @@ public class ViewPage {
     //called after fxml file has been loaded
     @FXML
     private void initialize() {
-        //initialize data table
-        medicineTable.setItems(MedicineHandler.getMedicineInventorList());
 
-        //initialize the medicine table with the two columns
-        medicineNameColumn.setCellValueFactory((TableColumn.CellDataFeatures<Medicine, String> cellData) -> cellData.getValue().medicineNameProperty());
-        medicineQuantityColumn.setCellValueFactory((TableColumn.CellDataFeatures<Medicine, Integer> cellData) -> cellData.getValue().quantityProperty().asObject());
+        initTable();
 
-        //clear medicine details
-        showMedicineDetails(null);
-
-        //listen for selection changes and show the medicine details when changed
-        medicineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showMedicineDetails(newValue));
-
-        checkOutBox.getItems().addAll(MedicineHandler.getMedicineCheckOutList());
-
-        if (!Objects.requireNonNull(UserHandler.getCurrentUserAccess()).equals("ADMIN"))
-            editButton.setDisable(true);
-        else
-            editButton.setDisable(false);
-
-        //double click item to add to checkout list
-        medicineNameColumn.setCellFactory(//todo: prompt user for this amount
-                this::doubleClick);
     }
 
     @FXML
@@ -109,6 +95,51 @@ public class ViewPage {
         ViewHandler.loadMenuPage();
     }
 
+    private void initTable() {
+        //initialize data table
+        medicineTable.setItems(MedicineHandler.getMedicineInventorList());
+
+        //initialize the medicine table with the two columns
+        medicineNameColumn.setCellValueFactory((TableColumn.CellDataFeatures<Medicine, String> cellData) -> cellData.getValue().medicineNameProperty());
+        medicineQuantityColumn.setCellValueFactory((TableColumn.CellDataFeatures<Medicine, Integer> cellData) -> cellData.getValue().quantityProperty().asObject());
+
+
+        checkOutColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Medicine, CheckBox>, ObservableValue<CheckBox>>() {
+            @Override
+            public ObservableValue<CheckBox> call(
+                    TableColumn.CellDataFeatures<Medicine, CheckBox> arg0) {
+                final Medicine[] medicine = {arg0.getValue()};
+                CheckBox checkBox = new CheckBox();
+                checkBox.selectedProperty().setValue(medicine[0].isCheckOut());
+                checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                    public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
+                        medicine[0].setCheckOut(new_val);
+                        medicine[0] = medicineTable.getSelectionModel().selectedItemProperty().get();
+                        MedicineHandler.addToCheckOut(medicine[0], ViewHandler.amountPrompt(medicine[0]));
+                    }
+                });
+                return new SimpleObjectProperty<CheckBox>(checkBox);
+            }
+        });
+
+
+        //checkOutColumn.setCellFactory(new SimpleObjectProperty<Boolean>(false));
+        showMedicineDetails(null);
+
+        //listen for selection changes and show the medicine details when changed
+        medicineTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showMedicineDetails(newValue));
+
+        checkOutBox.getItems().addAll(MedicineHandler.getMedicineCheckOutList());
+
+        if (!Objects.requireNonNull(UserHandler.getCurrentUserAccess()).equals("ADMIN"))
+            editButton.setDisable(true);
+        else
+            editButton.setDisable(false);
+
+        //double click item to add to checkout list
+        //  medicineNameColumn.setCellFactory(this::doubleClick);
+    }
+
     private void showMedicineDetails(Medicine medicine) {
         if (medicine != null) {
             //fill the labels with info from the user object
@@ -134,21 +165,5 @@ public class ViewPage {
         alert.setContentText("Please select an item in the table");
     }
 
-    private TableCell<Medicine, String> doubleClick(TableColumn<Medicine, String> param) {
-        TableCell<Medicine, String> cell = new TableCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item != null)
-                    setText(item);
-            }
-        };
-        cell.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                Medicine selectedMedicine = medicineTable.getSelectionModel().selectedItemProperty().get();
-                MedicineHandler.addToCheckOut(selectedMedicine, ViewHandler.amountPrompt(selectedMedicine));
-            }
-        });
-        return cell;
-    }
+
 }
