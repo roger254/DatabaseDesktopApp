@@ -9,6 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import roger.app.database.model.medicine.Medicine;
 import roger.app.database.model.medicine.MedicineHandler;
+import roger.app.database.model.users.UserHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class ViewHandler {
     }
 
     static void loadLoginPage() {
-
+        UserHandler.loadUsers();
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ViewHandler.class.getResource("loginPage.fxml"));
@@ -141,11 +142,11 @@ public class ViewHandler {
         return primaryStage;
     }
 
-    public static void showAlert(File file) {
+    public static void showAlert(File file, String process) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        alert.setHeaderText("Could not save data");
-        alert.setContentText("Could not save data to file:\n" + file.getPath());
+        alert.setHeaderText("Could not " + process + " data");
+        alert.setContentText("Could not " + process + " data to file:\n" + file.getPath());
 
         alert.showAndWait();
     }

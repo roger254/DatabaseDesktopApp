@@ -66,9 +66,9 @@ public class MedicineHandler {
     }
 
     public static void loadMedicineData() {
-        File file = MedicineHandler.getMedicineFilePath();
+        File file = getMedicineFilePath();
         if (file != null)
-            MedicineHandler.loadMedicineDataFromFile(file);
+            loadMedicineDataFromFile(file);
     }
 
     /*
@@ -101,12 +101,10 @@ public class MedicineHandler {
         try {
             JAXBContext context = JAXBContext.newInstance(MedicineWrapper.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-
             //Reading from the file and unmarshalling
             MedicineWrapper medicineWrapper = (MedicineWrapper) unmarshaller.unmarshal(file);
             medicineInventorList.clear();
             medicineInventorList.addAll(medicineWrapper.getMedicines());
-
             //save the file path to the registry
             setMedicineFilePath(file);
         } catch (JAXBException e) {
@@ -114,7 +112,6 @@ public class MedicineHandler {
             alert.setTitle("Error");
             alert.setHeaderText("Could not load data");
             alert.setContentText("Could not load data from file:\n" + file.getPath());
-
             alert.showAndWait();
         }
     }
@@ -125,50 +122,43 @@ public class MedicineHandler {
                     .newInstance(MedicineWrapper.class);
             Marshaller m = context.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
             // Wrapping our person data.
             MedicineWrapper wrapper = new MedicineWrapper();
             wrapper.setMedicines(medicineInventorList);
-
             // Marshalling and saving XML to the file.
             m.marshal(wrapper, file);
-
             // Save the file path to the registry.
             setMedicineFilePath(file);
         } catch (Exception e) { // catches ANY exception
-            ViewHandler.showAlert(file);
+            ViewHandler.showAlert(file, "save");
         }
     }
 
     private static void handleSave() {
-
-        File medicineFile = MedicineHandler.getMedicineFilePath();
+        File medicineFile = getMedicineFilePath();
         if (medicineFile != null) {
-            MedicineHandler.saveMedicineDataToFile(medicineFile);
+            saveMedicineDataToFile(medicineFile);
         } else {
             FileChooser fileChooser = new FileChooser();
-
             // Set extension filter
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
                     "XML files (*.xml)", "*.xml");
             fileChooser.getExtensionFilters().add(extFilter);
-
             // Show save file dialog
             File file = fileChooser.showSaveDialog(ViewHandler.getPrimaryStage());
-
             if (file != null) {
                 // Make sure it has the correct extension
                 if (!file.getPath().endsWith(".xml")) {
                     file = new File(file.getPath() + ".xml");
                 }
-                MedicineHandler.saveMedicineDataToFile(file);
+                saveMedicineDataToFile(file);
             }
         }
     }
 
     public static void handleLogout() {
         handleCancelCheckOut();
-        getMedicineCheckOutList().removeAll(MedicineHandler.getMedicineCheckOutList()); //clear inventory after selling
+        getMedicineCheckOutList().removeAll(getMedicineCheckOutList()); //clear inventory after selling
         handleSave();
     }
 }

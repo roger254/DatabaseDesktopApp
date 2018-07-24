@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <users>
-    <user/>
-    <user/>
-    <user/>
+    <user>
+        <access>ADMIN</access>
+        <name>Roger</name>
+        <password>roger254</password>
+    </user>
+    <user>
+        <access>REGULAR USER</access>
+        <name>Ken</name>
+        <password>ken254</password>
+    </user>
+    <user>
+        <access>REGULAR USER</access>
+        <name>Dan</name>
+        <password>dan254</password>
+    </user>
+    <user>
+        <access>REGULAR USER</access>
+        <name>Lily</name>
+        <password>lily254</password>
+    </user>
 </users>
