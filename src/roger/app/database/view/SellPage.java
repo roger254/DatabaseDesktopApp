@@ -44,6 +44,7 @@ public class SellPage {
                 int currentQuantity = medicine.getQuantity() - 1; //remove one from the quantity
                 medicine.setQuantity(currentQuantity); //update quantity
                 medicine.setCheckOut(false);
+                medicine.setToBeSold(false);
             } else if (medicine.getQuantity() <= 1) { //if quantity is one remove from inventory
                 MedicineHandler.getMedicineInventorList().remove(medicine); //remove it from inventory
             }

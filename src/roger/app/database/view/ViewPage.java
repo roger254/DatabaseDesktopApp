@@ -41,16 +41,17 @@ public class ViewPage {
 
     private boolean okClicked = false;
 
+    private int amount;
+
     //called after fxml file has been loaded
     @FXML
     private void initialize() {
-
         initTable();
-
     }
 
     @FXML
     private void handleRefresh() {
+        MedicineHandler.restoreDetails();
         initTable();
     }
 
@@ -109,8 +110,10 @@ public class ViewPage {
             checkBox.selectedProperty().setValue(medicine.isCheckOut());
             checkBox.selectedProperty().addListener((ov, old_val, new_val) -> medicine.setCheckOut(new_val));
             checkBox.setOnAction(event -> {
-                if (checkBox.isSelected())
-                    MedicineHandler.addToCheckOut(medicine, ViewHandler.amountPrompt(medicine));
+                if (checkBox.isSelected()) {
+                    amount = ViewHandler.amountPrompt(medicine);
+                    MedicineHandler.addToCheckOut(medicine, amount);
+                }
             });
             return new SimpleObjectProperty<>(checkBox);
         });

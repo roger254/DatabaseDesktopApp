@@ -8,7 +8,7 @@ public class MedicineHandler {
     private static Medicine medicine;
     private static ObservableList<Medicine> medicineInventorList = FXCollections.observableArrayList();
     private static ObservableList<Medicine> medicineCheckOutList = FXCollections.observableArrayList();
-    private static int prevousAmount = 0;
+    private static int previousQuantity = 0;
 
     static {
         loadMedicineData();
@@ -45,16 +45,27 @@ public class MedicineHandler {
 
     public static void addToCheckOut(Medicine medicine, int amount) {
         medicine.setQuantityToSell(amount);
-        prevousAmount = medicine.getQuantity();
-        medicine.setQuantity(prevousAmount - amount);
+        medicine.setToBeSold(true);
+        previousQuantity = medicine.getQuantity();
+        if (medicine.isToBeSold())
+            medicine.setQuantity(previousQuantity - amount);
         medicineCheckOutList.add(medicine);
+    }
+
+    public static void restoreDetails() {
+        if (medicineCheckOutList.size() > 0) {
+            for (Medicine medicine : medicineCheckOutList) {
+                if (!medicine.isCheckOut())
+                    medicine.setQuantity(previousQuantity);
+            }
+        }
     }
 
     public static void handleCancelCheckOut() {
         if (medicineCheckOutList.size() > 0)
             for (Medicine medicine : medicineCheckOutList) {
-                if (medicine.getQuantity() == prevousAmount)
-                    medicine.setQuantity(prevousAmount);
+                if (medicine.getQuantity() == previousQuantity)
+                    medicine.setQuantity(previousQuantity);
                 else
                     medicineCheckOutList.removeAll();
             }
